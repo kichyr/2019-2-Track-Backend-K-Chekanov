@@ -50,13 +50,12 @@ class GameCN:
             if col == [2, 2, 2]:
                 self.winner = 2
 
-        if [self.field[i][i] for i in range(3)] == [1, 1, 1]:
+        if([self.field[i][i] for i in range(3)] == [1, 1, 1] or
+           [self.field[i][2 - i] for i in range(3)] == [1, 1, 1]):
             self.winner = 1
-        if [self.field[i][2 - i] for i in range(3)] == [1, 1, 1]:
-            self.winner = 1
-        if [self.field[i][i] for i in range(3)] == [2, 2, 2]:
-            self.winner = 2
-        if [self.field[i][2 - i] for i in range(3)] == [2, 2, 2]:
+
+        if([self.field[i][i] for i in range(3)] == [2, 2, 2] or
+           [self.field[i][2 - i] for i in range(3)] == [2, 2, 2]):
             self.winner = 2
 
 
@@ -71,7 +70,8 @@ class GameCN:
             self.human()
             self.bot()
             self.draw_field()
-        if(self.winner == 3):
+
+        if self.winner == 3:
             print("DRAW!")
         else:
             print(f"WINNER IS THE {self.winner} PLAYER!!!")
@@ -81,7 +81,7 @@ class GameCN:
         handles user's turn
         """
         while True:
-            flag, _x, _y = correct_input(
+            flag, _x, _y = self.correct_input(
                 input("\n Enter coordinate of point(from left, up corner): ")
                 )
             if flag and self.field[_x][_y] == 0:
@@ -126,16 +126,19 @@ class GameCN:
         for row in self.field:
             print(f"\n| {row[0]} | {row[1]} | {row[2]} |")
 
-
-def correct_input(_input):
-    """checks user's input on correctness"""
-    try:
-        _x, _y = map(int, _input.split())
-    except ValueError:
+    @staticmethod
+    def correct_input(_input):
+        """checks user's input on correctness"""
+        try:
+            _x, _y = map(int, _input.split())
+        except ValueError:
+            return (False, 0, 0)
+        if isinstance(_y, int) and isinstance(_y, int) and _x in range(3) and _y in range(3):
+            return (True, _x, _y)
         return (False, 0, 0)
-    if isinstance(_y, int) and isinstance(_y, int) and _x in range(3) and _y in range(3):
-        return (True, _x, _y)
-    return (False, 0, 0)
+
+
+
 
 if __name__ == "__main__":
     GAME = GameCN()

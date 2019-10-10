@@ -1,2 +1,5 @@
 *.pyc
-venv/
+trackBackEnv/
+.vscode/
+.pytest_cache/
+__pycache__/
