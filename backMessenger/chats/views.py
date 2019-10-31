@@ -1,7 +1,22 @@
-from django.shortcuts import render
-from django import JsonResponse
-# Create your views here.
-def index(request):
-    return render(request, 'index.html')
+from django.http import JsonResponse, Http404
+# Create your views here
 
-def chat_detail(request, pk):
+def postChat(request):
+    if request.method == 'POST':
+        pass
+    else:
+        raise Http404
+    return JsonResponse({},status=200)
+def getChat(request):
+    if request.method == 'POST':
+        pass
+    else:
+        raise Http404
+    return JsonResponse({})
+
+def postMessage(request, chat_id):
+    if request.method == 'POST':
+        pass
+    else:
+        raise Http404
+    return JsonResponse({},status=200)
