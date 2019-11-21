@@ -1,8 +1,10 @@
 from django.urls import path, include
-from chats.views import postChat, getChat, postMessage
+from chats.views import post_chat, get_chat, post_message
+
 urlpatterns = [
     #path('index/', index, name='index'),
-    path('create_chat/', postChat, name='send_message'),
-    path('get_chat/<int: chat_id>', getChat, name='index'),
-    path('send_message/<int: chat_id>', postMessage, name='index'),
+    path('create_chat', post_chat, name='post_chat'),
+    path('get_chat/<int:chat_id>', get_chat, name='get_chat'),
+    path('send_message', post_message, name='post_message'),
+    #path('read_message/<int:message_id>', )
 ]

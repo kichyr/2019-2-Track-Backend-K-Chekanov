@@ -1,6 +1,6 @@
-from django.urls import path, include
-from users.views import getContacts, getProfile
+from django.urls import path
+from users.views import get_chat_list, get_profile
 urlpatterns = [
-    path('contacts_list/', getContacts, name='contacts'),
-    path('profile/<string: login>', getProfile, name='profile'),
+    path('contacts_list/<str:login>', get_chat_list, name='contacts'),
+    path('profile/<str:search_string>', get_profile, name='profile'),
 ]
