@@ -6,7 +6,6 @@ from django.views.decorators.csrf import csrf_exempt
 from chats.models import Message
 import datetime
 from django.views.decorators.http import require_http_methods
-from .forms import PostNewChatForm
 from django.contrib.auth.decorators import login_required
 import json
 from django import forms
@@ -131,3 +130,18 @@ def create_new_chat(topic, users_ids):
         user = User.objects.filter(id=user_id)[0]
         Member.objects.create(chat=chat, user=user).save()
 
+""" #------------------------------------
+@csrf_exempt
+@require_http_methods(["POST"])
+def upload_file(request):
+    form = UploadFileForm(request.POST, request.FILES)
+    if form.is_valid():
+        handle_uploaded_file(request.FILES['file'])
+        return HttpResponseRedirect('/success/url/')
+    else:
+        form = UploadFileForm()
+    return render(request, 'upload.html', {'form': form})
+
+class UploadFileForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    file = forms.FileField() """

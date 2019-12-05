@@ -8,13 +8,13 @@ img {
 }
 
 .logo {
-    width: 20vw;
+    width: 20vh;
 }
 
 .logoContainer {
     display: flex;
-    margin-bottom: 20vw;
-    margin-top: 20vw;
+    margin-bottom: 20vh;
+    margin-top: 20vh;
     font-family: inherit;
     font-weight: 500;
     line-height: 1.2;

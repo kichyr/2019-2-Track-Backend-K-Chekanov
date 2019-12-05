@@ -47,8 +47,8 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = 'login'
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
-SOCIAL_AUTH_VK_OAUTH2_KEY = '7226229'
-SOCIAL_AUTH_VK_OAUTH2_SECRET = 'wnci6xfAf0UWKYQWsojl'
+SOCIAL_AUTH_VK_OAUTH2_KEY = '7234891'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'PD10f2HEk9w6D59epOvT'
 
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['photos']
 
@@ -143,6 +143,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_ENDPOINT_URL = 'http://hb.bizmrg.com'
+AWS_ACCESS_KEY_ID =
+AWS_SECRET_ACCESS_KEY = 
+AWS_STORAGE_BUCKET_NAME = 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
