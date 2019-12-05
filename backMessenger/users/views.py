@@ -5,7 +5,9 @@ from django.db.models import Q
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 
+@login_required
 @csrf_exempt
 @require_http_methods(["GET"])
 def get_chat_list(request):
@@ -13,6 +15,7 @@ def get_chat_list(request):
         {"chats": json.dumps(get_chat_list_Impl(request.user.id))},
         status=200, safe=False)
 
+@login_required
 @csrf_exempt
 @require_http_methods(["GET"])
 def get_profile(request, search_string):
