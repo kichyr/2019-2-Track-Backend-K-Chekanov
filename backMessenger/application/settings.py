@@ -25,7 +25,7 @@ SECRET_KEY = '@#597-0-+24@v3bk@(!)kf69#!*udb_$^46lj8t%x=my0+-!2-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -102,10 +102,9 @@ WSGI_APPLICATION = 'application.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'messangerdb',
-        'USER': 'admin_messanger',
-        'PASSWORD': 'admin',
-        'HOST': '127.0.0.1',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
@@ -144,14 +143,15 @@ USE_L10N = True
 USE_TZ = True
 
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+""" DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_S3_ENDPOINT_URL = 'http://hb.bizmrg.com'
-AWS_ACCESS_KEY_ID =
-AWS_SECRET_ACCESS_KEY = 
-AWS_STORAGE_BUCKET_NAME = 
+AWS_ACCESS_KEY_ID = "cYrNspaW3RF6vEKyThsovJ"
+AWS_SECRET_ACCESS_KEY = "cYrNspaW3RF6vEKyThsovJ"
+AWS_STORAGE_BUCKET_NAME =  "track2019.chekanov"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
+"""
 
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.User'
