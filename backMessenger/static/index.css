@@ -1,0 +1,53 @@
+img {
+    border: 3px solid #5277c0;
+}
+
+.row {
+    width: 100%;
+    margin: 0;
+}
+
+.logo {
+    width: 20vw;
+}
+
+.logoContainer {
+    display: flex;
+    margin-bottom: 20vw;
+    margin-top: 20vw;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.2;
+    color: white;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-fluid {
+    height: 100vh;
+    background-color: #5277c0;
+    display: flex;
+    justify-content: center;
+    align-items: top;
+}
+
+.container-fluid > div {
+    width: 85%;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.card {
+    width: 100%;
+}
+
+.social-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.btn a, .btn a:hover {
+    color: white;
+    text-decoration: none ;
+}

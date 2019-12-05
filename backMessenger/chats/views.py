@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponseNotAllowed
+from django.http import JsonResponse, HttpResponseNotAllowed, HttpResponseForbidden
 from chats.models import Chat
 from users.models import User
 from users.models import Member
@@ -7,32 +7,40 @@ from chats.models import Message
 import datetime
 from django.views.decorators.http import require_http_methods
 from .forms import PostNewChatForm
+from django.contrib.auth.decorators import login_required
 import json
 from django import forms
 
 #------------------------------------
+def check_permission(request, user_id):
+    if request.user.id in user_id:
+        return True
+    return False
+
+
 @csrf_exempt
 @require_http_methods(["GET"])
 def get_chat(request, chat_id):
-    json_data = json.loads(request.body)
-    login = json_data['login']
+
     #validation
     if len(
         Member.objects.filter(chat_id=chat_id).select_related(
-        'user').filter(user__login=login)
+        'user').filter(user__id=request.user.id)
     ) == 0:
-        return JsonResponse({'errors': 'bad data'}, status=400)
+        return JsonResponse({'errors': 'required authentication or'}, status=403)
+
+    if len(Chat.object.filter(id=chat_id)) == 0:
+        return JsonResponse({'errors': 'chat does not exist'}, status=400)
     #
     return JsonResponse(
-        json.dumps(get_chat_messages(chat_id, login)),
+        json.dumps(get_chat_messages(chat_id, request.user.id)),
         status=200, safe=False)
     
-
-def get_chat_messages(chat_id, user_login):
+def get_chat_messages(chat_id, user_id):
     """
     returns all messages in chat given by chat_id
     &
-    update last_read_message_id in Member table for user with user_login
+    update last_read_message_id in Member table for user with user_id
     """
     messages = Message.objects.filter(chat_id=chat_id).order_by(
         '-added_at').select_related('users').values(
@@ -41,7 +49,7 @@ def get_chat_messages(chat_id, user_login):
     #last_read_message_id in Member table
     if len(messages) > 0:
         Member.objects.filter(
-            user_id=messages[0]['users_id'],
+            user_id=user_id,
             chat_id=chat_id 
         )[0].last_read_message_id = messages[0]['id']
 
@@ -55,6 +63,7 @@ def get_chat_messages(chat_id, user_login):
     }
 
 #------------------------------------
+@login_required
 @csrf_exempt
 @require_http_methods(["POST"])
 def post_message(request):
@@ -81,35 +90,44 @@ class PostMessageForm(forms.Form):
         return self.changed_data['user_id', 'chat_id']
     
     def save(self):
-        Message.objects.create(
+        user_id = self.cleaned_data['user_id']
+        chat_id = self.cleaned_data['chat_id']
+        new_message = Message(
         chat_id=self.cleaned_data['chat_id'],
         users_id=self.cleaned_data['user_id'],
         content=self.cleaned_data['content'],
         added_at=datetime.datetime.now()
         )
 
+        Member.objects.filter(
+            user_id=user_id,
+            chat_id=chat_id
+        )[0].last_read_message = new_message.id
+        new_message.save()
+
 #------------------------------------
+@login_required
 @csrf_exempt
 @require_http_methods(["POST"])
 def post_chat(request):
     json_data = json.loads(request.body)
     topic = json_data['topic']
-    users_logins = json_data['users_logins']
-    create_new_chat(topic, users_logins)
+    users_ids = json_data['users_ids']
+    create_new_chat(topic, users_ids)
     return JsonResponse({}, status=200)
 
-def create_new_chat(topic, users_logins):
+def create_new_chat(topic, users_ids):
     """
     create new chat with topic
-    attach to this chat list of users given by users_logins
+    attach to this chat list of users given by users_ids
     """
     group_chat_flag = False
-    if len(users_logins) > 2:
+    if len(users_ids) > 2:
         group_chat_flag = True
 
     chat = Chat.objects.create(topic=topic, is_group_chat=group_chat_flag)
     chat.save()
-    for user_login in users_logins:
-        user = User.objects.filter(login=user_login)[0]
+    for user_id in users_ids:
+        user = User.objects.filter(id=user_id)[0]
         Member.objects.create(chat=chat, user=user).save()
 

@@ -21,12 +21,12 @@ class User(AbstractUser):
         'Логин',
         max_length=10,
         unique=True,
-        null=False,
+        null=True,
         blank=False)
 
-    def save(self, *args, **kwargs):
+    """ def save(self, *args, **kwargs):
         self.username = self.login
-        super.save(*args, **kwargs)
+        super.save(*args, **kwargs) """
 
     def __str__(self):
         return self.login

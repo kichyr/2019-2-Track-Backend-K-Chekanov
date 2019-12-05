@@ -1,0 +1,28 @@
+APP: users
+    1) .../contacts_list
+    find users contact list according his tocken
+
+    2) ...users/get_profile_Impl/<str:search_string>
+    return list of users with given search string
+
+
+APP: chats
+    1) .../chats/create_chat/
+    body:
+    {
+        "topic": "topic_name"
+        [id1, id2, id3 ...]
+    }
+    create chat
+    
+
+    2) .../get_chat/<int:chat_id>
+    get chat with given id
+    updates last_read message for given user
+    returns {chat_id, topic, messages}
+    TODO: return last_read_messages
+
+
+    3) .../users/send_message
+    send message to chat
+    TODO: make update 
