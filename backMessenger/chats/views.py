@@ -16,7 +16,7 @@ def check_permission(request, user_id):
         return True
     return False
 
-
+@login_required
 @csrf_exempt
 @require_http_methods(["GET"])
 def get_chat(request, chat_id):
