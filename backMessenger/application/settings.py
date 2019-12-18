@@ -47,8 +47,8 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = 'login'
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
-SOCIAL_AUTH_VK_OAUTH2_KEY = '7234891'
-SOCIAL_AUTH_VK_OAUTH2_SECRET = 'PD10f2HEk9w6D59epOvT'
+SOCIAL_AUTH_VK_OAUTH2_KEY = '7226229'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'wnci6xfAf0UWKYQWsojl'
 
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['photos']
 
@@ -113,10 +113,10 @@ WSGI_APPLICATION = 'application.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'messanger',
-        'USER': 'messanger_admin',
+        'NAME': 'messangerdb',
+        'USER': 'admin_messanger',
         'PASSWORD': 'admin',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
