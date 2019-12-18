@@ -10,6 +10,7 @@ chardet==3.0.4
 decorator==4.4.1
 defusedxml==0.6.0
 Django==2.2.5
+django-cors-headers==3.2.0
 docutils==0.15.2
 gunicorn==19.9.0
 idna==2.8
@@ -28,6 +29,7 @@ parso==0.5.1
 pexpect==4.7.0
 pickleshare==0.7.5
 Pillow==6.2.1
+pkg-resources==0.0.0
 pluggy==0.13.0
 prompt-toolkit==2.0.10
 psycopg2-binary==2.8.3

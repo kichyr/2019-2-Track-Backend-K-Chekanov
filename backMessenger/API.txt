@@ -2,7 +2,7 @@ APP: users
     1) .../contacts_list
     find users contact list according his tocken
 
-    2) ...users/get_profile_Impl/<str:search_string>
+    2) ...users/profile/<str:search_string>
     return list of users with given search string
 
 
