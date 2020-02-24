@@ -1,0 +1,26 @@
+user kichyr;
+
+error_log /home/kichyr/2019-2-Track-Backend-K-Chekanov/nginx/logs/error.log;
+#pid /home/kichyr/2019-2-Track-Backend-K-Chekanov/nginx/logs/pid.log;
+worker_processes 2;
+
+events {
+    worker_connections 64;
+}
+
+http {
+    access_log /home/kichyr/2019-2-Track-Backend-K-Chekanov/nginx/logs/access_log;
+    server {
+
+        proxy_set_header Host       $host;
+        proxy_set_header X-Real-IP  $remote_addr;
+        listen 80;
+        server_name localhost;
+
+        location / {
+            proxy_pass http://localhost:8000;
+        }
+    }
+
+
+}

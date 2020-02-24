@@ -6,6 +6,7 @@ from .settings import BASE_DIR
 
 @login_required
 def home(request):
+    #print(request.user.avatar + "okkkkkk")
     with open(os.path.join(BASE_DIR, 'static', 'index.html')) as file:
         return HttpResponse(file.read())
 def login(request):
