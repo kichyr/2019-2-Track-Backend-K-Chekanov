@@ -1,5 +1,5 @@
 *.pyc
-trackBackEnv/
+messanger_env/
 .vscode/
 .pytest_cache/
 __pycache__/
