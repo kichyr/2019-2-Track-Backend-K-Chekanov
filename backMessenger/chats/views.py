@@ -28,7 +28,7 @@ def get_chat(request, chat_id):
     ) == 0:
         return JsonResponse({'errors': 'required authentication or'}, status=403)
 
-    if len(Chat.object.filter(id=chat_id)) == 0:
+    if len(Chat.objects.filter(id=chat_id)) == 0:
         return JsonResponse({'errors': 'chat does not exist'}, status=400)
     #
     return JsonResponse(
