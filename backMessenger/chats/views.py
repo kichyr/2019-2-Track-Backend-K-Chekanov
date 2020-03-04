@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 import json
 from django import forms
 
-#------------------------------------
+
 def check_permission(request, user_id):
     if request.user.id in user_id:
         return True

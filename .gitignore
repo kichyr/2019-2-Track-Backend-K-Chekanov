@@ -1,5 +1,5 @@
 *.pyc
-messanger_env/
+mess_env/
 .vscode/
 .pytest_cache/
 __pycache__/

@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 @csrf_exempt
 @require_http_methods(["GET"])
 def whoami(request):
+    #returns id of of the logged user
     return JsonResponse(json.dumps({'user_id': request.user.id}),
         status=200, safe=False)
 
@@ -31,7 +32,7 @@ def get_profile(request, search_string):
 
 
 def get_profile_Impl(search_string):
-    """return list of users that name/login/surname include search_string"""
+    #return list of users that name/login/surname include search_string
     users = User.objects.filter(
         Q(username__contains=search_string) |
         Q(first_name__contains=search_string) |
@@ -40,7 +41,7 @@ def get_profile_Impl(search_string):
 
 
 def get_chat_list_Impl(id):
-    """return list of chats belongs to user with sended id"""
+    #return list of chats belongs to user with sended id
     chat_list = Member.objects.select_related(
         'user').filter(user__id=id).select_related(
             'chat').values('chat_id', 'chat__topic', 'chat__last_message')
