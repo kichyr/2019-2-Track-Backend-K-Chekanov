@@ -34,7 +34,8 @@ def get_chat(request, chat_id):
     return JsonResponse(
         json.dumps(get_chat_messages(chat_id, request.user.id)),
         status=200, safe=False)
-    
+
+
 def get_chat_messages(chat_id, user_id):
     """
     returns all messages in chat given by chat_id
@@ -44,8 +45,8 @@ def get_chat_messages(chat_id, user_id):
     messages = Message.objects.filter(chat_id=chat_id).order_by(
         '-added_at').select_related('users').values(
             'id', 'users_id', 'users__avatar', 'added_at', 'content')
-    
-    #last_read_message_id in Member table
+
+    # last_read_message_id in Member table
     if len(messages) > 0:
         Member.objects.filter(
             user_id=user_id,
@@ -61,7 +62,7 @@ def get_chat_messages(chat_id, user_id):
         'messages': [m for m in messages]
     }
 
-#------------------------------------
+
 @login_required
 @csrf_exempt
 @require_http_methods(["POST"])
