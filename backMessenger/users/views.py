@@ -1,4 +1,5 @@
 from django.http import JsonResponse, HttpResponseNotAllowed
+from rest_framework.response import Response
 from users.models import User
 from users.models import Member
 from django.db.models import Q
@@ -6,6 +7,9 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+from .serializers import ChatSerializer, UserSerializer
+from rest_framework.decorators import api_view
+
 
 @login_required
 @csrf_exempt
@@ -41,8 +45,34 @@ def get_profile_Impl(search_string):
 
 
 def get_chat_list_Impl(id):
-    #return list of chats belongs to user with sended id
+    # return list of chats belongs to user with sended id
     chat_list = Member.objects.select_related(
         'user').filter(user__id=id).select_related(
             'chat').values('chat_id', 'chat__topic', 'chat__last_message')
     return [chat for chat in chat_list]
+
+# next given another way of getting data using serializers
+
+
+@api_view(('GET',))
+@login_required
+@csrf_exempt
+@require_http_methods(["GET"])
+def get_chat_list_serializer(request):
+    chats = Member.objects.select_related(
+        'user').filter(user__id=request.user.id).select_related(
+            'chat')
+    return Response(json.dumps(ChatSerializer(chats, many=True).data))
+
+
+@api_view(('GET',))
+@login_required
+@csrf_exempt
+@require_http_methods(["GET"])
+def get_profile_serializer(request, search_string):
+    # return list of users that name/login/surname include search_string
+    users = User.objects.filter(
+        Q(username__contains=search_string) |
+        Q(first_name__contains=search_string) |
+        Q(last_name__contains=search_string))
+    return Response(json.dumps(UserSerializer(users, many=True).data))

@@ -9,6 +9,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 import json
 from django import forms
+from chats.serializer import ChatSerializer
 
 
 def check_permission(request, user_id):
@@ -131,7 +132,40 @@ def create_new_chat(topic, users_ids):
         user = User.objects.filter(id=user_id)[0]
         Member.objects.create(chat=chat, user=user).save()
 
-""" #------------------------------------
+
+@login_required
+@csrf_exempt
+@require_http_methods(["GET"])
+def get_chat_serializer(request, chat_id):
+    # validation
+    if len(
+        Member.objects.filter(chat_id=chat_id).select_related(
+            'user').filter(user__id=request.user.id)
+    ) == 0:
+        return JsonResponse(
+            {'errors': 'required authentication or'}, status=403)
+
+    if len(Chat.objects.filter(id=chat_id)) == 0:
+        return JsonResponse({'errors': 'chat does not exist'}, status=400)
+
+    # getting last message for specific chat
+    last_message = Message.objects.filter(chat_id=chat_id).order_by(
+        '-added_at')[:1]
+
+    # update last_read message in Member
+    if len(last_message) > 0:
+        Member.objects.filter(
+            user_id=request.user.id,
+            chat_id=chat_id
+        )[0].last_read_message_id = last_message[0]['id']
+
+    # after all validations and updates return serialized chat
+    return JsonResponse(
+        json.dumps(ChatSerializer(Chat.objects.get(pk=chat_id)).data),
+        status=200, safe=False)
+
+
+"""
 @csrf_exempt
 @require_http_methods(["POST"])
 def upload_file(request):
@@ -145,4 +179,5 @@ def upload_file(request):
 
 class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=50)
-    file = forms.FileField() """
+    file = forms.FileField() 
+"""

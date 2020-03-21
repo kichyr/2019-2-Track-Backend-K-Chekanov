@@ -13,6 +13,7 @@ class LoginTest(TestCase):
         self.selenium.quit()
 
     def test_register(self):
+        """ Open login page on localhost."""
         selenium = self.selenium
         selenium.get('http://127.0.0.1:8000/')
         login_redirect_vk_butt = selenium.find_element_by_id('login_vk_link')

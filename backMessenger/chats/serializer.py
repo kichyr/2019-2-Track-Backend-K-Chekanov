@@ -1,16 +1,22 @@
 from rest_framework import serializers
+from chats.models import Message, Chat
 
-class ChatSerializer(serializers.Serializers):
-    chat_id = serializers.IntegerField(read_only=True)
-    topic = serializers.CharField(
-        required=False,
-        allow_blank=True,
-        max_length=30)
-    description = serializers.CharField()
-    description_html = serializers.CharField(source='description', read_only=True)
 
-    def transform_description_html(self, obj, value):
-        from django.contrib.markup.templatetags.markup import markdown
-        return markdown(value)
+class ChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chat
+        fields = ['id', 'topic']
 
-class MessageSerializer(serializers.Serializers):
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        messages = Message.objects.filter(chat_id=instance['id']).order_by(
+            '-added_at').select_related('users').values(
+            'id', 'users_id', 'users__avatar', 'added_at', 'content')
+        ret['messages'] = messages
+        return ret
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['id', 'users_id', 'users__avatar', 'added_at', 'content']

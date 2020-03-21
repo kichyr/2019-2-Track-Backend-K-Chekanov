@@ -42,13 +42,15 @@ class TestViews(TestCase):
     def setUp(self):
         #creating test user
         self.user = User.objects.create_user(
-        username='testuser', email='test@mail.ru', password='top_secret_password')
+            username='testuser',
+            email='test@mail.ru',
+            password='top_secret_password',
+            first_name='Ivan'
+        )
 
         #creating client and logged with test user
         self.client = Client()
         self.client.login(username='testuser', password='top_secret_password')
-
-
 
     def test_get_chat(self):
         chat = ChatFactory()
@@ -58,9 +60,25 @@ class TestViews(TestCase):
             MessageFactory(users=self.user, chat=chat).save()
 
         self.contacts_url = reverse('get_chat', args=[chat.id])
-
-
         response = self.client.get(self.contacts_url)
         self.assertEquals(response.status_code, 200)
+        self.assertEquals(len(json.loads(response.json())['messages']), 30)
 
+    def test_get_profile_serializer(self):
+        response = self.client.get(
+            reverse('profile_serializer', args=['testuser']))
+        self.assertEquals(
+            json.loads(response.json())[0]['first_name'],
+            'Ivan')
+
+    def test_get_chat_serializer(self):
+        chat = ChatFactory()
+        chat.save()
+        Member(user=self.user, chat=chat).save()
+        for i in range(30):
+            MessageFactory(users=self.user, chat=chat).save()
+
+        self.contacts_url = reverse('get_chat_serializer', args=[chat.id])
+        response = self.client.get(self.contacts_url)
+        self.assertEquals(response.status_code, 200)
         self.assertEquals(len(json.loads(response.json())['messages']), 30)
